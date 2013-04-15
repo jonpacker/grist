@@ -1,0 +1,108 @@
+extends layout
+
+
+block content
+  - var srm2hex = require('srm2hex');
+  - var formatMins = function(mins) { return mins == 1 ? mins + " minute" : mins + " minutes" };
+  - var formatPercent = function(pct, pr) { return (pct * 100).toFixed(pr||0) + '%' }
+  - var _ = require('underscore');
+
+  .title.section
+    h1= name
+    div.namesub
+      | #{style}
+      span.brewer= brewer
+  .batch-info.section
+    div.batch-info
+      h3 Batch Overview
+      div.kv-pair
+        span.key Batch Size
+        span.val= batchSize
+      div.kv-pair
+        span.key Boil Size
+        span.val= boilSize
+      div.kv-pair
+        span.key Boil Time
+        - var formattedMins = formatMins(boilTime)
+        span.val= formattedMins
+      div.kv-pair
+        span.key Efficiency
+        - var efficiencyFormatted = formatPercent(efficiency);
+        span.val= efficiencyFormatted 
+    div.recipe-info
+      h3 Recipe Overview
+      div.kv-pair
+        span.key OG
+        span.val= og
+      div.kv-pair
+        span.key FG
+        span.val= fg
+      div.kv-pair
+        span.key ABV
+        - var abvFormatted = formatPercent(abv,1);
+        span.val= abvFormatted
+      div.kv-pair
+        span.key IBU
+        span.val= ibu
+      - var hexcol = srm2hex(color)
+      div.kv-pair
+        span.key Colour
+        span.val 
+          | #{color}
+          .colindicate(style="background-color:#{hexcol}")
+  div.fermentables.section
+    h2 Fermentables
+    - var fkeys = Object.keys(fermentables);
+    - var totalGrain = _.reduce(fkeys, function(total, fermentable) {
+    -     return total + fermentables[fermentable];
+    -   }, 0);
+    for amount, fermentable in fermentables
+      div.kv-pair
+        -var formattedAmount= amount + 'kg (' + formatPercent(amount/totalGrain) + ')';
+        span.key= formattedAmount 
+        span.val= fermentable
+  div.mash.section
+    h2 Mash
+    for step, num in mash
+      .mash-step
+        h3
+          span.num ##{num + 1} 
+          span.step-name #{step.name}
+          span.mash-step-type= step.type
+        div.kv-pair
+          span.key Amount
+          -var literAmount = step.amount + "L";
+          span.value=literAmount
+        div.kv-pair
+          span.key Length
+          -var formattedLength = formatMins(step.length);
+          span.value= formattedLength
+        div.kv-pair
+          span.key Target temp
+          -var formattedTargetTemp = step.targetTemp + "º C";
+          span.value= formattedTargetTemp
+        div.kv-pair
+          span.key Infusion temp
+          -var formattedInfusionTemp = step.infusionTemp + "º C";
+          span.value= formattedInfusionTemp
+  - var allAdditions = hops.concat(additions);
+  - var times = _.chain(allAdditions).pluck('time').uniq().value();
+  - var groupedAdditions = _.groupBy(allAdditions, function(add) { return add.time });
+  div.additions.section
+    h2 Additions
+    for time in times
+      -var formattedTime = typeof time == 'number' ? formatMins(time) : time;
+      h3.time 
+        .icon-time
+        | #{formattedTime}
+        .icon-arrow-right
+      div.addition-group
+        for addition in groupedAdditions[time]
+          div.addition 
+            span.name= addition.name
+            if addition.aa
+              - var aa = formatPercent(addition.aa, 1).replace('%','');
+              span.aa= aa
+            - var formattedAmount = typeof addition.amount == 'number' ? addition.amount + 'g' : addition.amount;
+            span.amount= formattedAmount
+            span.use #{addition.use}

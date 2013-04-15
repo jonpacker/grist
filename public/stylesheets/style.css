@@ -1,0 +1,231 @@
+@font-face {
+  font-family: embedded_font;
+  src: url("/stylesheets/embedded_font.woff") format('woff');
+  font-style: normal;
+  font-weight: normal;
+}
+@font-face {
+  font-family: embedded_font;
+  src: url("/stylesheets/embedded_font_bold.woff") format('woff');
+  font-style: normal;
+  font-weight: bold;
+}
+body {
+  background-color: #132537;
+  color: #fe8315;
+  font-family: embedded_font, sans-serif;
+  font-size: 18px;
+}
+body,
+html {
+  padding: 0px;
+  margin: 0px;
+}
+body {
+  padding-bottom: 90px;
+}
+h1 {
+  font-size: 62px;
+}
+.colindicate {
+  display: inline-block;
+  margin: 0px 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+}
+.section {
+  width: 70%;
+  padding: 60px 15%;
+  margin: 0 auto;
+}
+.section.title {
+  color: #ebcab8;
+  background-color: #fa3113;
+  text-align: center;
+}
+.section.title h1 {
+  margin-bottom: 0px;
+}
+.section.title .namesub {
+  font-size: 30px;
+  font-weight: bold;
+}
+.section.title .namesub:before {
+  content: 'A ';
+  font-weight: normal;
+}
+.section.title .namesub .brewer:before {
+  content: ' by ';
+  font-weight: normal;
+}
+.section.batch-info {
+  background-color: #132537;
+  color: #fe8315;
+  text-align: center;
+  font-size: 24px;
+  position: relative;
+}
+.section.batch-info h3 {
+  color: #ebcab8;
+  margin: 0px;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+  border-bottom: 3px solid #fe8315;
+}
+.section.batch-info .batch-info,
+.section.batch-info .recipe-info {
+  display: inline-block;
+  vertical-align: top;
+  width: 30%;
+  margin-right: 3%;
+}
+.section.batch-info .key,
+.section.batch-info .val {
+  display: inline-block;
+  width: 45%;
+  padding: 0px 2.5%;
+}
+.section.batch-info .key {
+  text-align: right;
+  color: #006c80;
+}
+.section.batch-info .val {
+  text-align: left;
+  font-weight: bold;
+}
+.section.fermentables {
+  background-color: #ebcab8;
+  color: #132537;
+  text-align: center;
+  font-size: 24px;
+}
+.section.fermentables h2 {
+  margin-top: 0px;
+}
+.section.fermentables .key,
+.section.fermentables .val {
+  display: inline-block;
+  width: 48%;
+  padding: 0px 1%;
+}
+.section.fermentables .key {
+  text-align: right;
+}
+.section.fermentables .val {
+  text-align: left;
+  font-weight: bold;
+}
+.section.mash {
+  padding-top: 0px;
+  background-color: #ebcab8;
+  color: #132537;
+  font-size: 24px;
+  text-align: center;
+}
+.section.mash h2 {
+  margin-top: 0px;
+}
+.section.mash .mash-step {
+  width: 27%;
+  display: inline-block;
+  font-size: 18px;
+  padding: 20px 2%;
+  margin-right: 1%;
+  margin-left: 1%;
+  background-color: #fe8315;
+  vertical-align: top;
+  text-align: left;
+}
+.section.mash .mash-step h3 {
+  margin-top: 0.3em;
+  margin-bottom: 0.4em;
+  border-bottom: 2px solid #ebcab8;
+  line-height: 24px;
+}
+.section.mash .mash-step h3 .step-name {
+  display: inline-block;
+  width: 82.5%;
+  line-height: 22px;
+  font-size: 24px;
+}
+.section.mash .mash-step h3 .num {
+  font-size: 36px;
+  color: #ebcab8;
+  display: inline-block;
+  min-width: 17.5%;
+}
+.section.mash .mash-step h3 .mash-step-type {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #ebcab8;
+  line-height: 14px;
+  vertical-align: top;
+}
+.section.mash .mash-step .key,
+.section.mash .mash-step .value {
+  width: 50%;
+  display: inline-block;
+}
+.section.mash .mash-step .value {
+  font-weight: bold;
+  text-align: right;
+}
+.section.additions {
+  font-size: 24px;
+  text-align: center;
+}
+.section.additions h3.time {
+  width: 20%;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0px;
+  text-align: left;
+  line-height: 48px;
+  color: #006c80;
+}
+.section.additions h3.time .icon-time {
+  margin-right: 15px;
+}
+.section.additions h3.time .icon-arrow-right {
+  margin-top: 15px;
+  margin-left: 15px;
+  font-size: 18px;
+  float: right;
+}
+.section.additions .addition {
+  text-align: left;
+  display: inline-block;
+  width: 100%;
+  line-height: 32px;
+}
+.section.additions .addition .name {
+  font-weight: bold;
+}
+.section.additions .addition .aa {
+  vertical-align: top;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0px 5px;
+}
+.section.additions .addition .aa:after {
+  content: '%';
+  font-size: 12px;
+}
+.section.additions .addition .amount {
+  margin: 0px 20px;
+}
+.section.additions .addition .use {
+  text-transform: uppercase;
+  font-size: 18px;
+  color: #006c80;
+}
+.section.additions .addition-group {
+  display: inline-block;
+  padding-top: 10px;
+  margin-bottom: 16px;
+  width: 78%;
+  margin-left: 2%;
+  vertical-align: top;
+}
