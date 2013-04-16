@@ -5,6 +5,7 @@ block content
   - var srm2hex = require('srm2hex');
   - var formatMins = function(mins) { return mins == 1 ? mins + " minute" : mins + " minutes" };
   - var formatPercent = function(pct, pr) { return (pct * 100).toFixed(pr||0) + '%' }
+  - var formatAmount = function(amt, pr, unit) { return amt.toFixed(pr) + unit };
   - var _ = require('underscore');
 
   .title.section
@@ -17,10 +18,12 @@ block content
       h3 Batch Overview
       div.kv-pair
         span.key Batch Size
-        span.val= batchSize
+        - var formattedBatchSize = formatAmount(batchSize, 2, 'L');
+        span.val= formattedBatchSize
       div.kv-pair
         span.key Boil Size
-        span.val= boilSize
+        - var formattedBoilSize = formatAmount(boilSize, 2, 'L');
+        span.val= formattedBoilSize
       div.kv-pair
         span.key Boil Time
         - var formattedMins = formatMins(boilTime)
@@ -86,23 +89,30 @@ block content
           -var formattedInfusionTemp = step.infusionTemp + "º C";
           span.value= formattedInfusionTemp
   - var allAdditions = hops.concat(additions);
-  - var times = _.chain(allAdditions).pluck('time').uniq().value();
-  - var groupedAdditions = _.groupBy(allAdditions, function(add) { return add.time });
+  - var steps = _.chain(allAdditions).pluck('use').uniq().value();
+  - var hasNumericTime = function(add) { return typeof add.time == 'number' };
+  - var numericallyTimed = _.chain(allAdditions).filter(hasNumericTime).sortBy(function(add) { return -add.time }).value();
+  - allAdditions = numericallyTimed.concat(_.reject(allAdditions, hasNumericTime));
+  - var groupedAdditions = _.groupBy(allAdditions, function(add) { return add.use });
   div.additions.section
     h2 Additions
-    for time in times
-      -var formattedTime = typeof time == 'number' ? formatMins(time) : time;
-      h3.time 
-        .icon-time
-        | #{formattedTime}
-        .icon-arrow-right
-      div.addition-group
-        for addition in groupedAdditions[time]
-          div.addition 
-            span.name= addition.name
-            if addition.aa
-              - var aa = formatPercent(addition.aa, 1).replace('%','');
-              span.aa= aa
-            - var formattedAmount = typeof addition.amount == 'number' ? addition.amount + 'g' : addition.amount;
-            span.amount= formattedAmount
-            span.use #{addition.use}
+    for step in steps
+      - var times = _.chain(groupedAdditions[step]).pluck('time').uniq().value();
+      - var timeGroupedAdditions = _.groupBy(groupedAdditions[step], function(add) { return add.time });
+      h3.step= step
+      for time in times
+        -var formattedTime = typeof time == 'number' ? formatMins(time) : time;
+        div.addition-group-wrap
+          h3.time 
+            .icon-time
+            | #{formattedTime}
+            .icon-arrow-right
+          div.addition-group
+            for addition in timeGroupedAdditions[time]
+              div.addition 
+                - var formattedAmount = typeof addition.amount == 'number' ? addition.amount + 'g' : addition.amount;
+                span.amount= formattedAmount
+                span.name= addition.name
+                if addition.aa
+                  - var aa = formatPercent(addition.aa, 1).replace('%','');
+                  span.aa= aa

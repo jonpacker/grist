@@ -84,13 +84,7 @@ exports.index = function(req, res){
       "amount": 4.8,
       "infusionTemp": 100,
       "targetTemp": 73,
-      "length": 10 },
-    { "name": "Saccharification Rest",
-      "type": "Infusion",
-      "amount": 23.5,
-      "infusionTemp": 73,
-      "targetTemp": 68,
-      "length": 70 }
+      "length": 10 }
   ]
 });
 };
