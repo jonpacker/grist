@@ -21,8 +21,8 @@ html {
   padding: 0px;
   margin: 0px;
 }
-body {
-  padding-bottom: 90px;
+.section:last-child {
+  padding-bottom: 120px;
 }
 h1 {
   font-size: 64px;
@@ -228,7 +228,7 @@ h2 {
   font-size: 12px;
 }
 .section.additions .addition .amount {
-  width: 17%;
+  width: 19%;
   display: inline-block;
 }
 .section.additions .addition .use {
@@ -245,4 +245,29 @@ h2 {
   width: 30%;
   margin-left: 2%;
   vertical-align: top;
+}
+.section.yeast {
+  text-align: center;
+  font-size: 18px;
+  background-color: #fe8315;
+  color: #132537;
+}
+.section.yeast .code {
+  font-weight: bold;
+  margin-right: 16px;
+}
+.section.yeast .code + .name {
+  font-weight: normal;
+}
+.section.yeast .name {
+  font-weight: bold;
+}
+.section.yeast .amount {
+  margin-left: 25px;
+  font-weight: bold;
+}
+.section.yeast .amount:before {
+  content: '—';
+  display: inline-block;
+  margin-right: 25px;
 }

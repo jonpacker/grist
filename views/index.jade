@@ -116,3 +116,10 @@ block content
                 if addition.aa
                   - var aa = formatPercent(addition.aa, 1).replace('%','');
                   span.aa= aa
+  div.yeast.section
+    h2 Yeast
+    if yeast.code
+      span.code= yeast.code
+    span.name= yeast.name
+    - var formattedAmount = typeof yeast.amount == 'number' ? yeast.amount + 'ml' : yeast.amount;
+    span.amount= formattedAmount

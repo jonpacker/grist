@@ -26,8 +26,8 @@ html
   padding 0px
   margin 0px
 
-body
-  padding-bottom 90px
+.section:last-child
+  padding-bottom 120px
 
 h1
   font-size 64px
@@ -227,7 +227,7 @@ h2
           font-size 12px
 
       .amount
-        width 17%
+        width 19%
         display inline-block
 
       .use
@@ -244,5 +244,27 @@ h2
       width 30%
       margin-left 2%
       vertical-align top
+  &.yeast
+    text-align center
+    font-size 18px
 
-      
+    background-color c_4
+    color c_1
+
+    .code
+      font-weight bold
+      margin-right 16px
+
+      & + .name 
+        font-weight normal
+
+    .name 
+      font-weight bold
+
+    .amount
+      margin-left 25px
+      font-weight bold
+      &:before
+        content '—'
+        display inline-block
+        margin-right 25px
