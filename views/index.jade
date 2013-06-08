@@ -36,10 +36,10 @@ block content
       h3 Recipe Overview
       div.kv-pair
         span.key OG
-        span.val= og
+        span.val= og.toFixed(3)
       div.kv-pair
         span.key FG
-        span.val= fg
+        span.val= fg.toFixed(3)
       div.kv-pair
         span.key ABV
         - var abvFormatted = formatPercent(abv,1);
@@ -55,15 +55,14 @@ block content
           .colindicate(style="background-color:#{hexcol}")
   div.fermentables.section
     h2 Fermentables
-    - var fkeys = Object.keys(fermentables);
-    - var totalGrain = _.reduce(fkeys, function(total, fermentable) {
-    -     return total + fermentables[fermentable];
+    - var totalGrain = _.reduce(fermentables, function(total, fermentable) {
+    -     return total + fermentable.amount;
     -   }, 0);
-    for amount, fermentable in fermentables
+    for fermentable in fermentables
       div.kv-pair
-        -var formattedAmount= amount + 'kg (' + formatPercent(amount/totalGrain) + ')';
+        - var formattedAmount= fermentable.amount+ 'kg (' + formatPercent(fermentable.amount/totalGrain) + ')';
         span.key= formattedAmount 
-        span.val= fermentable
+        span.val= fermentable.name
   div.mash.section
     h2 Mash
     for step, num in mash
@@ -78,7 +77,7 @@ block content
           span.value=literAmount
         div.kv-pair
           span.key Length
-          -var formattedLength = formatMins(step.length);
+          -var formattedLength = formatMins(step.duration);
           span.value= formattedLength
         div.kv-pair
           span.key Target temp
@@ -110,7 +109,7 @@ block content
           div.addition-group
             for addition in timeGroupedAdditions[time]
               div.addition 
-                - var formattedAmount = typeof addition.amount == 'number' ? addition.amount + 'g' : addition.amount;
+                - var formattedAmount = typeof addition.amount == 'number' ? (addition.amount * 1000) + 'g' : addition.amount;
                 span.amount= formattedAmount
                 span.name= addition.name
                 if addition.aa

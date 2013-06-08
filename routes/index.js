@@ -2,6 +2,17 @@
 /*
  * GET home page.
  */
+var fs = require('fs');
+
+exports.recipe = function(req, res) {
+  fs.readFile('./recipes/' + req.params.recipe + '.json', 'utf8', 
+  function(err, data) {
+    if (err) return res.end(500);
+    var recipe = JSON.parse(data);
+    recipe.require = require;
+    res.render('index', recipe);
+  });
+}
 
 exports.index = function(req, res){
   res.render('index', {
