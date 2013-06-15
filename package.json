@@ -11,6 +11,10 @@
     "stylus": "*",
     "moment": "~2.0.0",
     "srm2hex": "~1.0.0",
-    "underscore": "~1.4.4"
+    "underscore": "~1.4.4",
+    "beerjson": "~0.1.2",
+    "seraph": "~0.5.7",
+    "seraph-model": "~0.3.11",
+    "slug": "~0.2.2"
   }
 }

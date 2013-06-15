@@ -87,7 +87,7 @@ block content
           span.key Infusion temp
           -var formattedInfusionTemp = step.infusionTemp + "º C";
           span.value= formattedInfusionTemp
-  - var allAdditions = hops.concat(additions);
+  - var allAdditions = hops.concat(locals.additions || []);
   - var steps = _.chain(allAdditions).pluck('use').uniq().value();
   - var hasNumericTime = function(add) { return typeof add.time == 'number' };
   - var numericallyTimed = _.chain(allAdditions).filter(hasNumericTime).sortBy(function(add) { return -add.time }).value();
