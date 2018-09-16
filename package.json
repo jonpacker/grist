@@ -6,15 +6,13 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "^4.16.3",
-    "pug": "^2.0.3",
-    "stylus": "^0.54.5",
-    "moment": "^2.22.2",
-    "srm2hex": "^1.0.2",
-    "underscore": "^1.9.1",
     "beerjson": "^0.1.4",
-    "seraph": "^0.15.3",
-    "seraph-model": "^0.10.0",
-    "slug": "^0.9.1"
+    "express": "^4.16.3",
+    "moment": "^2.22.2",
+    "pug": "^2.0.3",
+    "slug": "^0.9.1",
+    "srm2hex": "^1.0.2",
+    "stylus": "^0.54.5",
+    "underscore": "^1.9.1"
   }
 }
