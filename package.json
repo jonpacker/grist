@@ -7,12 +7,18 @@
   },
   "dependencies": {
     "beerjson": "^0.1.4",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "moment": "^2.22.2",
+    "morgan": "^1.9.1",
     "pug": "^2.0.3",
+    "redis": "^2.8.0",
     "slug": "^0.9.1",
     "srm2hex": "^1.0.2",
     "stylus": "^0.54.5",
     "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1"
   }
 }
