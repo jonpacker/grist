@@ -6,13 +6,14 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "beerjson": "^0.1.4",
+    "@awspilot/dynamodb": "^1.2.8",
+    "beerjson": "0.1.5",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "moment": "^2.22.2",
     "morgan": "^1.9.1",
     "pug": "^2.0.3",
-    "redis": "^2.8.0",
+    "shortid": "^2.2.13",
     "slug": "^0.9.1",
     "srm2hex": "^1.0.2",
     "stylus": "^0.54.5",

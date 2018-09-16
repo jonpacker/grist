@@ -1,83 +1,54 @@
-var fs = require('fs');
-var db = require('seraph')('http://localhost:10507');
-var beer = require('../models/beer')(db);
-var beerjson = require('beerjson');
+const beerjson = require('beerjson')
+const slug = require('slug')
+const shortid = require('shortid')
 
-exports.recipe = function(req, res) {
-  fs.readFile('./recipes/' + req.params.recipe + '.json', 'utf8', 
-  function(err, data) {
-    if (err) return res.end(500);
-    var recipe = JSON.parse(data);
-    recipe.require = require;
-    res.render('index', recipe);
-  });
-}
-
-function readBeerXmlFromRequest(req,res, next) {
-  var beerXml = '';
-  req.on('data', function(ch) { beerXml += ch });
-  req.on('end', function() {
-    beerjson.fromBeerXml(beerXml, function(err, recipe) {
-      if (err) return res.send(500, err.message);
-      else return next(recipe);
+function readBeerXmlFromRequest (req) {
+  return new Promise((resolve, reject) => {
+    let beerXml = ''
+    req.on('data', ch => { beerXml += ch })
+    req.on('end', () => {
+      beerjson.fromBeerXml(beerXml.toString(), function (err, recipe) {
+        if (err) reject(err)
+        else resolve(recipe)
+      })
     })
-  });
+  })
 };
 
-exports.importBeerXml = function(req, res) {
-  readBeerXmlFromRequest(req, res, function(recipe) {
-    beer.save(recipe, function(err, savedRecipe) {
-      console.log(savedRecipe);
-      if (err) {
-        if (err.statusCode) {
-          res.send(err.statusCode, err.message);
-        } else {
-          res.send(500, err.message);
-        }
-        return;
-      }
-
-      res.json(201, savedRecipe);
-    });
-  });
-};
-
-exports.getRecipeJson = function(req, res) {
-  beer.firstWithSlug(req.params.slug, function(err, recipe) {
-    if (err) return res.send(err.statusCode || 500, err.message || err);
-    res.json(recipe);
-  });
-}
-
-exports.replaceRecipe = function(req, res) {
-  readBeerXmlFromRequest(req, res, function(recipe) {
-    beer.firstWithSlug(req.params.slug, function(err, oldRecipe) {
-      if (err) return res.send(err.statusCode || 500, err.message || err);
-      db.delete(oldRecipe, true, function(err) {
-        if (err) return res.send(err.statusCode || 500, err.message || err);
-        beer.save(recipe, function(err, recipe) {
-          if (err) return res.send(err.statusCode || 500, err.message || err);
-          res.json(recipe);
-        });
-      });
-    });
-  });
-};
-
-exports.readRecipe = function(req, res) {
-  beer.firstWithSlug(req.params.slug, function(err, recipe) {
-    if (err) return res.send(err.statusCode || 500, err.message || err);
-    recipe.require = require;
-    res.render('index', recipe);
-  });
-};
-
-exports.deleteRecipe = function(req, res) {
-  beer.firstWithSlug(req.params.slug, function(err, recipe) {
-    if (err) return res.send(err.statusCode || 500, err.message || err);
-    db.delete(recipe, true, function(err) {
-      if (err) return res.send(err.statusCode || 500, err.message || err);
-      res.send(200);
+module.exports = app => {
+  app.post('/', async (req, res) => {
+    const recipe = await readBeerXmlFromRequest(req)
+    recipe.slug = `${slug(recipe.name).toLowerCase()}-${shortid()}`
+    await app.db.insert({
+      slug: `grist_${recipe.slug}`,
+      data: JSON.stringify(recipe)
     })
-  });
-};
+    res.status(201).json({ path: `/${recipe.slug}` })
+  })
+
+  app.get('/json/:slug', async (req, res) => {
+    const recipe = await app.db.where('slug').eq(`grist_${req.params.slug}`).get()
+    if (!recipe) return res.sendStatus(404)
+    res.set('Content-Type', 'application/json')
+    res.end(recipe.data)
+  })
+
+  app.put('/:slug', async (req, res) => {
+    const recipe = await readBeerXmlFromRequest(req)
+    await app.db.update({
+      slug: `grist_${recipe.slug}`,
+      data: JSON.stringify(recipe)
+    })
+    res.sendStatus(200)
+  })
+
+  app.get('/:slug', async (req, res) => {
+    const recipe = await app.db.where('slug').eq(`grist_${req.params.slug}`).get()
+    if (!recipe || !recipe.data) return res.sendStatus(404)
+    res.render('index', JSON.parse(recipe.data))
+  })
+
+  app.delete('/:slug', async (req, res) => {
+    await app.db.delete(`grist_${req.params.slug}`)
+  })
+}

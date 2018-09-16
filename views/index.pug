@@ -2,11 +2,9 @@ extends layout
 
 
 block content
-  - var srm2hex = require('srm2hex');
-  - var formatMins = function(mins) { return mins == 1 ? mins + " minute" : mins + " minutes" };
-  - var formatPercent = function(pct, pr) { return (pct * 100).toFixed(pr||0) + '%' }
-  - var formatAmount = function(amt, pr, unit) { return amt.toFixed(pr) + unit };
-  - var _ = require('underscore');
+  - var formatMins = (mins) => mins == 1 ? mins + " minute" : mins + " minutes"
+  - var formatPercent = (pct, pr) => (pct * 100).toFixed(pr||0) + '%'
+  - var formatAmount = (amt, pr, unit) => amt ? amt.toFixed(pr) + unit : '-';
 
   .title.section
     h1= name
@@ -60,7 +58,7 @@ block content
     -   }, 0);
     for fermentable in fermentables
       div.kv-pair
-        - var formattedAmount= fermentable.amount+ 'kg (' + formatPercent(fermentable.amount/totalGrain) + ')';
+        - var formattedAmount= rp(fermentable.amount, 2).toFixed(2) + 'kg (' + formatPercent(fermentable.amount/totalGrain) + ')';
         span.key= formattedAmount 
         span.val= fermentable.name
   div.mash.section
@@ -71,10 +69,11 @@ block content
           span.num ##{num + 1} 
           span.step-name #{step.name}
           span.mash-step-type= step.type
-        div.kv-pair
-          span.key Amount
-          -var literAmount = step.amount + "L";
-          span.value=literAmount
+        if step.amount
+          div.kv-pair
+            span.key Amount
+            -var literAmount = step.amount + "L";
+            span.value=literAmount
         div.kv-pair
           span.key Length
           -var formattedLength = formatMins(step.duration);
@@ -83,10 +82,11 @@ block content
           span.key Target temp
           -var formattedTargetTemp = step.targetTemp + "º C";
           span.value= formattedTargetTemp
-        div.kv-pair
-          span.key Infusion temp
-          -var formattedInfusionTemp = step.infusionTemp + "º C";
-          span.value= formattedInfusionTemp
+        if step.amount
+          div.kv-pair
+            span.key Infusion temp
+            -var formattedInfusionTemp = step.infusionTemp + "º C";
+            span.value= formattedInfusionTemp
   - var allAdditions = hops.concat(locals.additions || []);
   - var steps = _.chain(allAdditions).pluck('use').uniq().value();
   - var hasNumericTime = function(add) { return typeof add.time == 'number' };
@@ -109,7 +109,7 @@ block content
           div.addition-group
             for addition in timeGroupedAdditions[time]
               div.addition 
-                - var formattedAmount = typeof addition.amount == 'number' ? (addition.amount * 1000) + 'g' : addition.amount;
+                - var formattedAmount = typeof addition.amount == 'number' ? rp(addition.amount * 1000, 2) + 'g' : addition.amount;
                 span.amount= formattedAmount
                 span.name= addition.name
                 if addition.aa
