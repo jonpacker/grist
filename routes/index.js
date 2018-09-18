@@ -45,7 +45,9 @@ module.exports = app => {
   app.get('/:slug', async (req, res) => {
     const recipe = await app.db.where('slug').eq(`grist_${req.params.slug}`).get()
     if (!recipe || !recipe.data) return res.sendStatus(404)
-    res.render('index', JSON.parse(recipe.data))
+    res.status(200)
+    res.set('Content-Type', 'text/html')
+    res.end(app.templates.index(Object.assign({}, app.locals, JSON.parse(recipe.data))))
   })
 
   app.delete('/:slug', async (req, res) => {

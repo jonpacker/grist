@@ -1,0 +1,10 @@
+{
+  "lambda": {
+    "role": "grist-executor",
+    "name": "grist",
+    "region": "eu-west-1"
+  },
+  "api": {
+    "id": "vu0d1gxhbj"
+  }
+}
